@@ -71,7 +71,6 @@ object Funciones {
     }
   }
 
-
   def reconstruirCadenaTurbo (n : Int , o : Oraculo ) : Seq [Char]={
     def reconstruirCadenaTurboAux(acu: Seq[String], n:Int): Seq[String] = {
       if (((n == 0 || n == 1) && acu.nonEmpty) || n < 0 ) {
