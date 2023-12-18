@@ -5,6 +5,7 @@ import org.scalameter.withWarmer
 import org.scalameter.Warmer
 import Funciones._
 import Funciones_Paralelas._
+
 object Comparacion {
   def compararAlgoritmos(Funcion1:(Int,Oraculo) => Seq[Char], Funcion2:(Int,Oraculo) => Seq[Char])(n: Int,oraculo: Oraculo): (Double, Double, Double) = {
     val timeF1 = withWarmer(new Warmer.Default) measure {
