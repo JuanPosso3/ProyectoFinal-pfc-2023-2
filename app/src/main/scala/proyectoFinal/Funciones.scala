@@ -73,7 +73,7 @@ object Funciones {
 
 
   def reconstruirCadenaTurbo (n : Int , o : Oraculo ) : Seq [Char]={
-      def reconstruirCadenaTurboAux(cadena: Seq[Char], combinaciones: Seq[String], acu: Seq[String], n:Int): Seq[String] = {
+      def reconstruirCadenaTurboAux(acu: Seq[String], n:Int): Seq[String] = {
         if (((n == 0 || n == 1) && acu.nonEmpty) || n < 0 ) {
           acu
         } else {
@@ -84,12 +84,12 @@ object Funciones {
             if o(cadena)
           } yield cadena
 
-          val acumula = acu ++ cadenaSelecta
-          reconstruirCadenaTurboAux(combinaciones.head.toSeq, combinaciones.tail, acumula,n-2)
+          val acumulado = acu ++ cadenaSelecta
+          reconstruirCadenaTurboAux(acumulado,n-2)
         }
       }
       if(n%2 == 0){
-        val subCadenasBuenas= reconstruirCadenaTurboAux( Seq(), Seq(), Seq(), n/2)
+        val subCadenasBuenas= reconstruirCadenaTurboAux(Seq(), n/2)
 
         val posiblesCadenas =  for {
           subCadena1 <- subCadenasBuenas
@@ -99,8 +99,8 @@ object Funciones {
 
         posiblesCadenas.mkString
       }else{
-        val subCadenasBuenas1 = reconstruirCadenaTurboAux( Seq(), Seq(), Seq(), n/2)
-        val subCadenasBuenas2 = reconstruirCadenaTurboAux( Seq(), Seq(), Seq(), n-(n/2))
+        val subCadenasBuenas1 = reconstruirCadenaTurboAux(Seq(), n/2)
+        val subCadenasBuenas2 = reconstruirCadenaTurboAux(Seq(), n-(n/2))
         val posiblesCadenas = for {
           subCadena1 <- subCadenasBuenas1
           subCadena2 <- subCadenasBuenas2
@@ -108,6 +108,7 @@ object Funciones {
         } yield subCadena1 + subCadena2
 
         posiblesCadenas.mkString
+
 
       }
   }
