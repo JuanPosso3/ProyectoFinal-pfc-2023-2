@@ -6,9 +6,7 @@
   */
 package proyectoFinal
 
-import org.scalameter.measure
-import org.scalameter.withWarmer
-import org.scalameter.Warmer
+
 import Funciones._
 import Funciones_Paralelas._
 import Comparacion._
@@ -24,7 +22,8 @@ object ProyectoFinal{
       val cadenaAleatoria = crearAletorias(n)
       println("Tam de la cadena: " + n)
       println("Cadena Aleatoria: " + cadenaAleatoria)
-      println(compararAlgoritmos(reconstruirCadenaTurboMejorada,reconstruirCadenaTurboMejoradaPar(n))(n,oraculo(cadenaAleatoria)))
+      println(reconstruirCadenaTurboMejorada(n,oraculo(cadenaAleatoria)))
+      println(compararAlgoritmos(reconstruirCadenaIngenuo,reconstruirCadenaIngenuoPar(n))(n,oraculo(cadenaAleatoria)))
 
   }
 }

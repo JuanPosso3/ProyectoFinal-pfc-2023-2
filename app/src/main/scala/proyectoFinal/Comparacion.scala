@@ -99,7 +99,7 @@ object Comparacion {
     val tiempoTurboAceleradaPar = (1 to 100).map(_ => 0.0).toArray
     for (i <- 0 until 100) {
       val time = withWarmer(new Warmer.Default) measure {
-        reconstruirCadenaTurboAceleradaPar(5)(cadenaAleatoria.length, oraculo)
+        reconstruirCadenaTurboAceleradaPar(cadenaAleatoria.length, oraculo)
       }
       tiempoTurboAceleradaPar(i) = time.value
     }
@@ -192,7 +192,7 @@ object Comparacion {
     val tiempoTurboAceleradaPar = (1 to 100).map(_ => 0.0).toArray
     for (i <- 0 until 100) {
       val time = withWarmer(new Warmer.Default) measure {
-        reconstruirCadenaTurboAceleradaPar(5)(cadenaAleatoria.length, oraculo)
+        reconstruirCadenaTurboAceleradaPar(cadenaAleatoria.length, oraculo)
       }
       tiempoTurboAceleradaPar(i) = time.value
     }

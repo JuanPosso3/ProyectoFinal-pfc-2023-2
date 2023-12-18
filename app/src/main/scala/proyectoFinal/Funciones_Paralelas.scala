@@ -136,7 +136,7 @@ object Funciones_Paralelas {
     }
 
   }
-  def reconstruirCadenaTurboAceleradaPar(umbral: Int)(n : Int , o : Oraculo ) : Seq [Char]= {
+  def reconstruirCadenaTurboAceleradaPar(n : Int , o : Oraculo ) : Seq [Char]= {
     def reconstruirCadenaTurboAceleradaParAux(acu: Seq[String], n:Int,baseInicial:Int,potencia:Int): Seq[String] = {
       if ( baseInicial >= n && acu.nonEmpty) {
         acu
