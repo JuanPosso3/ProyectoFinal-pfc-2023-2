@@ -91,17 +91,11 @@ object Comparacion {
     }
 
 
-    val tiempoTurboAceleradaPar = (1 to 100).map(_ => 0.0).toArray
-    for (i <- 0 until 100) {
-      val time = withWarmer(new Warmer.Default) measure {
-        reconstruirCadenaTurboAceleradaPar(cadenaAleatoria.length, oraculo)
-      }
-      tiempoTurboAceleradaPar(i) = time.value
-    }
+
     Vector(tiemposIngenua.sum / 100, tiemposIngenuaPar.sum / 100, tiempoMejorado.sum / 100,
       tiempoMejoradoPar.sum / 100, tiempoTurbo.sum / 100, tiempoTurboPar.sum / 100,
-      tiempoTurboMejorada.sum / 100, tiempoTurboMejoradaPar.sum / 100,
-      tiempoTurboAceleradaPar.sum / 100)
+      tiempoTurboMejorada.sum / 100, tiempoTurboMejoradaPar.sum / 100
+    )
   }
 
   def desempenoDeFuncionesSec(tamCadena: Int): Vector[Double] = {
@@ -178,16 +172,10 @@ object Comparacion {
       }
       tiempoTurboMejoradaPar(i) = time.value
     }
-    val tiempoTurboAceleradaPar = (1 to 100).map(_ => 0.0).toArray
-    for (i <- 0 until 100) {
-      val time = withWarmer(new Warmer.Default) measure {
-        reconstruirCadenaTurboAceleradaPar(cadenaAleatoria.length, oraculo)
-      }
-      tiempoTurboAceleradaPar(i) = time.value
-    }
+
 
     Vector(tiempoIngenuaPar.sum / 100,  tiempoMejoradoPar.sum / 100, tiempoTurboPar.sum / 100,
-      tiempoTurboMejoradaPar.sum / 100, tiempoTurboAceleradaPar.sum / 100)
+      tiempoTurboMejoradaPar.sum / 100)
   }
 
 }
