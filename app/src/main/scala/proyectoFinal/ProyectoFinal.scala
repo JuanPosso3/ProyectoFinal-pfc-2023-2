@@ -2,7 +2,6 @@
   * Proyecto Final - Programación Funcional
   * Autores:  Juan Miguel Posso Alvarado 2259610
   *           Esteban Revelo 2067507
-  *           Nicolas Rojas 2259
   * Profesor: Carlos A Delgado
   */
 package proyectoFinal
@@ -21,12 +20,11 @@ object ProyectoFinal{
 
 
   def main(args: Array[String]): Unit = {
-      // Pruebas de la función oraculoFunc
-      val n = 4
+      val n = 15
       val cadenaAleatoria = crearAletorias(n)
-      println("Tamaño de la cadena: " + n)
+      println("Tam de la cadena: " + n)
       println("Cadena Aleatoria: " + cadenaAleatoria)
-      println(compararAlgoritmos(reconstruirCadenaIngenuo, reconstruirCadenaIngenuoPar(5))(n, oraculo(cadenaAleatoria)))
+      println(compararAlgoritmos(reconstruirCadenaMejorado,reconstruirCadenaMejoradoPar(n))(n,oraculo(cadenaAleatoria)))
 
   }
 }
