@@ -20,12 +20,11 @@ object ProyectoFinal{
 
 
   def main(args: Array[String]): Unit = {
-      val n = 15
+      val n = 16
       val cadenaAleatoria = crearAletorias(n)
       println("Tam de la cadena: " + n)
       println("Cadena Aleatoria: " + cadenaAleatoria)
-      println(compararAlgoritmos(reconstruirCadenaMejorado,reconstruirCadenaMejoradoPar(n))(n,oraculo(cadenaAleatoria)))
+      println(compararAlgoritmos(reconstruirCadenaTurboMejorada,reconstruirCadenaTurboMejoradaPar(n))(n,oraculo(cadenaAleatoria)))
 
   }
 }
-

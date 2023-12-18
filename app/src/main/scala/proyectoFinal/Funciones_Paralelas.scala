@@ -13,7 +13,7 @@ object Funciones_Paralelas {
     cadenaEncontrada
   }
   def reconstruirCadenaMejoradoPar(umbral: Int) (n : Int , o : Oraculo ): Seq[Char]= {
-    def reconstruirCadenaMejoradoParAux(cadena: Seq[Char], combinaciones: Seq[String], acu: Seq[String], n:Int): Seq[String] = {
+    def reconstruirCadenaMejoradoParAux(acu: Seq[String], n:Int): Seq[String] = {
       if (n == 0) {
         acu
       } else {
@@ -21,31 +21,31 @@ object Funciones_Paralelas {
 
         val cadenaEncontrada = for {
           cadena <- combinaciones
-          if o(cadena) == true
+          if o(cadena)
         } yield cadena
 
-        val acumulacion = acu ++ cadenaEncontrada
-        reconstruirCadenaMejoradoParAux(combinaciones.head.toSeq, combinaciones.tail, acumulacion,n-1)
+        val acumulado = acu ++ cadenaEncontrada
+        reconstruirCadenaMejoradoParAux(acumulado,n-1)
       }
     }
 
     if(n%2 == 0){
-      val subCadenasCorrectas = task(reconstruirCadenaMejoradoParAux( Seq(), Seq(), Seq(), n/2))
+      val subCadenasCorrectas = task(reconstruirCadenaMejoradoParAux( Seq(), n/2))
 
       val posiblesCadenas =  for {
         subCadena1 <- subCadenasCorrectas.join()
         subCadena2 <- subCadenasCorrectas.join()
-        if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+        if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
       } yield subCadena1 + subCadena2
 
       posiblesCadenas.mkString
     }else{
-      val (subCadenasCorrectas1, subCadenasCorrectas2) = parallel(reconstruirCadenaMejoradoParAux( Seq(), Seq(), Seq(), n/2),
-        reconstruirCadenaMejoradoParAux( Seq(), Seq(), Seq(), n-(n/2)))
+      val (subCadenasCorrectas1, subCadenasCorrectas2) = parallel(reconstruirCadenaMejoradoParAux( Seq(), n/2),
+        reconstruirCadenaMejoradoParAux( Seq(), n-(n/2)))
       val posiblesCadenas = for {
         subCadena1 <- subCadenasCorrectas1
         subCadena2 <- subCadenasCorrectas2
-        if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+        if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
       } yield subCadena1 + subCadena2
 
       posiblesCadenas.mkString
@@ -54,39 +54,39 @@ object Funciones_Paralelas {
   }
 
   def reconstruirCadenaTurboPar(umbral: Int)(n : Int , o : Oraculo ) : Seq [Char]={
-    def reconstruirCadenaTurboParAux(cadena: Seq[Char], combinaciones: Seq[String], acu: Seq[String], n:Int): Seq[String] = {
-      if (((n == 0 || n == 1) && acu.length > 0) || n < 0 ) {
+    def reconstruirCadenaTurboParAux(acu: Seq[String], n:Int): Seq[String] = {
+      if (((n == 0 || n == 1) && acu.nonEmpty) || n < 0 ) {
         acu
       } else {
         val combinaciones  = generarCadenas(n)
 
         val cadenaEncontrada = for {
           cadena <- combinaciones
-          if o(cadena) == true
+          if o(cadena)
         } yield cadena
 
-        val acumulacion = acu ++ cadenaEncontrada
-        reconstruirCadenaTurboParAux(combinaciones.head.toSeq, combinaciones.tail, acumulacion,n-2)
+        val acumulado = acu ++ cadenaEncontrada
+        reconstruirCadenaTurboParAux(acumulado,n-2)
       }
     }
 
     if(n%2 == 0){
-      val subCadenasCorrectas = task(reconstruirCadenaTurboParAux( Seq(), Seq(), Seq(), n/2))
+      val subCadenasCorrectas = task(reconstruirCadenaTurboParAux(Seq(), n/2))
 
       val posiblesCadenas =  for {
         subCadena1 <- subCadenasCorrectas.join()
         subCadena2 <- subCadenasCorrectas.join()
-        if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+        if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
       } yield subCadena1 + subCadena2
 
       posiblesCadenas.mkString
     }else{
-      val (subCadenasCorrectas1,subCadenasCorrectas2) = parallel(reconstruirCadenaTurboParAux( Seq(), Seq(), Seq(), n/2)
-        ,reconstruirCadenaTurboParAux( Seq(), Seq(), Seq(), n-(n/2)))
+      val (subCadenasCorrectas1,subCadenasCorrectas2) = parallel(reconstruirCadenaTurboParAux(Seq(), n/2)
+        ,reconstruirCadenaTurboParAux(Seq(), n-(n/2)))
       val posiblesCadenas = for {
         subCadena1 <- subCadenasCorrectas1
         subCadena2 <- subCadenasCorrectas2
-        if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+        if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
       } yield subCadena1 + subCadena2
 
       posiblesCadenas.mkString
@@ -95,40 +95,40 @@ object Funciones_Paralelas {
 
   }
   def reconstruirCadenaTurboMejoradaPar(umbral: Int)(n : Int , o : Oraculo ) : Seq [Char]= {
-    def reconstruirCadenaTurboMejoradaParAux(cadena: Seq[Char], combinaciones: Seq[String], acu: Seq[String], n:Int,baseInicial:Int,potencia:Int): Seq[String] = {
-      if ( baseInicial >= n && acu.length > 0) {
+    def reconstruirCadenaTurboMejoradaParAux(acu: Seq[String], n:Int,baseInicial:Int,potencia:Int): Seq[String] = {
+      if ( baseInicial >= n && acu.nonEmpty) {
         acu
       } else {
         val combinaciones  = generarCadenas(n)
 
         val cadenaEncontrada = for {
           cadena <- combinaciones
-          if o(cadena) == true
+          if o(cadena)
         } yield cadena
 
-        val acumulacion = acu ++ cadenaEncontrada
+        val acumulado = acu ++ cadenaEncontrada
         val base = math.pow(2,potencia).toInt
-        reconstruirCadenaTurboMejoradaParAux(combinaciones.head.toSeq, combinaciones.tail, acumulacion,n-base,base,potencia+1)
+        reconstruirCadenaTurboMejoradaParAux(acumulado,n-base,base,potencia+1)
       }
     }
 
     if(n%2 == 0){
-      val subCadenasCorrectas = task(reconstruirCadenaTurboMejoradaParAux( Seq(), Seq(), Seq(), n/2,2,1))
+      val subCadenasCorrectas = task(reconstruirCadenaTurboMejoradaParAux(Seq(), n/2,2,1))
 
       val posiblesCadenas =  for {
         subCadena1 <- subCadenasCorrectas.join()
         subCadena2 <- subCadenasCorrectas.join()
-        if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+        if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
       } yield subCadena1 + subCadena2
 
       posiblesCadenas.mkString
     }else{
-      val (subCadenasCorrectas1,subCadenasCorrectas2) = parallel(reconstruirCadenaTurboMejoradaParAux( Seq(), Seq(), Seq(), n/2,2,1)
-        ,reconstruirCadenaTurboMejoradaParAux( Seq(), Seq(), Seq(), n-(n/2),2,1))
+      val (subCadenasCorrectas1,subCadenasCorrectas2) = parallel(reconstruirCadenaTurboMejoradaParAux(Seq(), n/2,2,1)
+        ,reconstruirCadenaTurboMejoradaParAux(Seq(), n-(n/2),2,1))
       val posiblesCadenas = for {
         subCadena1 <- subCadenasCorrectas1
         subCadena2 <- subCadenasCorrectas2
-        if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+        if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
       } yield subCadena1 + subCadena2
 
       posiblesCadenas.mkString
@@ -137,25 +137,25 @@ object Funciones_Paralelas {
 
   }
   def reconstruirCadenaTurboAceleradaPar(umbral: Int)(n : Int , o : Oraculo ) : Seq [Char]= {
-    def reconstruirCadenaTurboAceleradaParAux(cadena: Seq[Char], combinaciones: Seq[String], acu: Seq[String], n:Int,baseInicial:Int,potencia:Int): Seq[String] = {
-      if ( baseInicial >= n && acu.length > 0) {
+    def reconstruirCadenaTurboAceleradaParAux(acu: Seq[String], n:Int,baseInicial:Int,potencia:Int): Seq[String] = {
+      if ( baseInicial >= n && acu.nonEmpty) {
         acu
       } else {
         val combinaciones  = generarCadenas(n)
 
         val cadenaEncontrada = for {
           cadena <- combinaciones
-          if o(cadena) == true
+          if o(cadena)
         } yield cadena
 
-        val acumulacion = acu ++ cadenaEncontrada
+        val acumulado = acu ++ cadenaEncontrada
         val base = math.pow(2,potencia).toInt
-        reconstruirCadenaTurboAceleradaParAux(combinaciones.head.toSeq, combinaciones.tail, acumulacion,n-base,base,potencia+1)
+        reconstruirCadenaTurboAceleradaParAux(acumulado,n-base,base,potencia+1)
       }
     }
 
     if(n%2 == 0){
-      val subCadenasCorrectas = (reconstruirCadenaTurboAceleradaParAux( Seq(), Seq(), Seq(), n/2,2,1))
+      val subCadenasCorrectas = (reconstruirCadenaTurboAceleradaParAux(Seq(), n/2,2,1))
 
       val posiblesCadenas =  for {
         subCadena1 <- subCadenasCorrectas
@@ -168,15 +168,15 @@ object Funciones_Paralelas {
       val posibilidades = vacio.generarPosibilidades(arbolDePosibilidades.join())
       val cadenaEncontrada = for {
         posibilidad <- posibilidades
-        if o(posibilidad) == true
+        if o(posibilidad)
       } yield posibilidad
 
       cadenaEncontrada.mkString
 
 
     }else{
-      val (subCadenasCorrectas1,subCadenasCorrectas2) = parallel(reconstruirCadenaTurboAceleradaParAux( Seq(), Seq(), Seq(), n/2,2,1)
-        , reconstruirCadenaTurboAceleradaParAux( Seq(), Seq(), Seq(), n-(n/2),2,1))
+      val (subCadenasCorrectas1,subCadenasCorrectas2) = parallel(reconstruirCadenaTurboAceleradaParAux(Seq(), n/2,2,1)
+        , reconstruirCadenaTurboAceleradaParAux(Seq(), n-(n/2),2,1))
       val posiblesCadenas = for {
         subCadena1 <- subCadenasCorrectas1
         subCadena2 <- subCadenasCorrectas2
@@ -188,7 +188,7 @@ object Funciones_Paralelas {
       val posibilidades = vacio.generarPosibilidades(arbolDePosibilidades.join())
       val cadenaEncontrada = for {
         posibilidad <- posibilidades
-        if o(posibilidad) == true
+        if o(posibilidad)
       } yield posibilidad
 
       cadenaEncontrada.mkString

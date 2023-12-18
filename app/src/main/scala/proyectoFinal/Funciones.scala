@@ -23,21 +23,13 @@ object Funciones {
       }
     }
   }
-  /*
+
   def reconstruirCadenaIngenuo(n: Int, o: Oraculo): Seq[Char] = {
     val combinaciones = generarCadenas(n)
     combinaciones.find(cadena => o(cadena)).get.toSeq
   }
-   */
-  def reconstruirCadenaIngenuo(n: Int, oraculo: Oraculo): Seq[Char] = {
-    val combinaciones = generarCadenas(n)
-    val cadenaEncontrada = for {
-      cadena <- combinaciones
-      if oraculo(cadena) == true
-    } yield cadena.toSeq
 
-    cadenaEncontrada.head
-  }
+
   def reconstruirCadenaMejorado (n : Int , oraculo : Oraculo ): Seq[Char]= {
     def reconstruirCadenaMejoradoAux( acu: Seq[String], n:Int): Seq[String] = {
       if (n == 0) {
@@ -47,11 +39,11 @@ object Funciones {
 
         val cadenaEncontrada = for {
           cadena <- combinaciones
-          if oraculo(cadena) == true
+          if oraculo(cadena)
         } yield cadena
 
-        val acumulacion = acu ++ cadenaEncontrada
-        reconstruirCadenaMejoradoAux( acumulacion,n-1)
+        val acumulado = acu ++ cadenaEncontrada
+        reconstruirCadenaMejoradoAux( acumulado,n-1)
       }
     }
 
@@ -61,7 +53,7 @@ object Funciones {
       val posiblesCadenas =  for {
         subCadena1 <- subCadenasCorrectas
         subCadena2 <- subCadenasCorrectas
-        if (oraculo(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+        if oraculo(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
       } yield subCadena1 + subCadena2
 
       posiblesCadenas.mkString
@@ -71,7 +63,7 @@ object Funciones {
       val posiblesCadenas = for {
         subCadena1 <- subCadenasCorrectas1
         subCadena2 <- subCadenasCorrectas2
-        if (oraculo(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+        if oraculo(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
       } yield subCadena1 + subCadena2
 
       posiblesCadenas.mkString
@@ -82,14 +74,14 @@ object Funciones {
 
   def reconstruirCadenaTurbo (n : Int , o : Oraculo ) : Seq [Char]={
       def reconstruirCadenaTurboAux(cadena: Seq[Char], combinaciones: Seq[String], acu: Seq[String], n:Int): Seq[String] = {
-        if (((n == 0 || n == 1) && acu.length > 0) || n < 0 ) {
+        if (((n == 0 || n == 1) && acu.nonEmpty) || n < 0 ) {
           acu
         } else {
           val combinaciones  = generarCadenas(n)
 
           val cadenaSelecta = for {
             cadena <- combinaciones
-            if o(cadena) == true
+            if o(cadena)
           } yield cadena
 
           val acumula = acu ++ cadenaSelecta
@@ -102,7 +94,7 @@ object Funciones {
         val posiblesCadenas =  for {
           subCadena1 <- subCadenasBuenas
           subCadena2 <- subCadenasBuenas
-          if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+          if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
         } yield subCadena1 + subCadena2
 
         posiblesCadenas.mkString
@@ -112,7 +104,7 @@ object Funciones {
         val posiblesCadenas = for {
           subCadena1 <- subCadenasBuenas1
           subCadena2 <- subCadenasBuenas2
-          if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+          if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
         } yield subCadena1 + subCadena2
 
         posiblesCadenas.mkString
@@ -120,64 +112,64 @@ object Funciones {
       }
   }
   def reconstruirCadenaTurboMejorada (n : Int , o : Oraculo ) : Seq [Char]= {
-      def reconstruirCadenaTurboMejoradaAux(cadena: Seq[Char], combinaciones: Seq[String], acu: Seq[String], n: Int, baseInicial: Int, potencia: Int): Seq[String] = {
-        if (baseInicial >= n && acu.length > 0) {
+      def reconstruirCadenaTurboMejoradaAux(acu: Seq[String], n: Int, baseInicial: Int, potencia: Int): Seq[String] = {
+        if (baseInicial >= n && acu.nonEmpty) {
           acu
         } else {
           val combinaciones = generarCadenas(n)
 
           val cadenaSelecta = for {
             cadena <- combinaciones
-            if o(cadena) == true
+            if o(cadena)
           } yield cadena
 
-          val acumula = acu ++ cadenaSelecta
+          val acumulado = acu ++ cadenaSelecta
           val base = math.pow(2, potencia).toInt
-          reconstruirCadenaTurboMejoradaAux(combinaciones.head.toSeq, combinaciones.tail, acumula, n - base, base, potencia + 1)
+          reconstruirCadenaTurboMejoradaAux(acumulado, n - base, base, potencia + 1)
         }
       }
       if (n % 2 == 0) {
-        val subCadenasCorrectas = reconstruirCadenaTurboMejoradaAux(Seq(), Seq(), Seq(), n / 2, 2, 1)
+        val subCadenasCorrectas = reconstruirCadenaTurboMejoradaAux(Seq(), n / 2, 2, 1)
 
         val posiblesCadenas = for {
           subCadena1 <- subCadenasCorrectas
           subCadena2 <- subCadenasCorrectas
-          if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+          if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
         } yield subCadena1 + subCadena2
 
         posiblesCadenas.mkString
       } else {
-        val subCadenasCorrectas1 = reconstruirCadenaTurboMejoradaAux(Seq(), Seq(), Seq(), n / 2, 2, 1)
-        val subCadenasCorrectas2 = reconstruirCadenaTurboMejoradaAux(Seq(), Seq(), Seq(), n - (n / 2), 2, 1)
+        val subCadenasCorrectas1 = reconstruirCadenaTurboMejoradaAux(Seq(), n / 2, 2, 1)
+        val subCadenasCorrectas2 = reconstruirCadenaTurboMejoradaAux(Seq(), n - (n / 2), 2, 1)
         val posiblesCadenas = for {
           subCadena1 <- subCadenasCorrectas1
           subCadena2 <- subCadenasCorrectas2
-          if (o(subCadena1 + subCadena2) == true) && ((subCadena1 + subCadena2).length == n)
+          if o(subCadena1 + subCadena2) && ((subCadena1 + subCadena2).length == n)
         } yield subCadena1 + subCadena2
 
         posiblesCadenas.mkString
       }
   }
   def reconstruirCadenaTurboAcelerada (n : Int , oraculo : Oraculo ) : Seq [Char]= {
-    def reconstruirCadenaTurboAceleradaAux(cadena: Seq[Char], combinaciones: Seq[String], acumulador: Seq[String], n:Int,baseInicial:Int,potencia:Int): Seq[String] = {
-      if ( baseInicial >= n && acumulador.length > 0) {
-        acumulador
+    def reconstruirCadenaTurboAceleradaAux(acu: Seq[String], n:Int,baseInicial:Int,potencia:Int): Seq[String] = {
+      if ( baseInicial >= n && acu.length > 0) {
+        acu
       } else {
         val combinaciones  = generarCadenas(n)
 
         val cadenaEncontrada = for {
           cadena <- combinaciones
-          if oraculo(cadena) == true
+          if oraculo(cadena)
         } yield cadena
 
-        val acumulacion = acumulador ++ cadenaEncontrada
+        val acumulado = acu ++ cadenaEncontrada
         val base = math.pow(2,potencia).toInt
-        reconstruirCadenaTurboAceleradaAux(combinaciones.head.toSeq, combinaciones.tail, acumulacion,n-base,base,potencia+1)
+        reconstruirCadenaTurboAceleradaAux(acumulado,n-base,base,potencia+1)
       }
     }
 
     if(n%2 == 0){
-      val subCadenasCorrectas = (reconstruirCadenaTurboAceleradaAux( Seq(), Seq(), Seq(), n/2,2,1))
+      val subCadenasCorrectas = (reconstruirCadenaTurboAceleradaAux(Seq(), n/2,2,1))
 
       val posiblesCadenas =  for {
         subCadena1 <- subCadenasCorrectas
@@ -190,14 +182,14 @@ object Funciones {
       val posibilidades = vacio.generarPosibilidades(arbolDePosibilidades)
       val cadenaEncontrada = for {
         posibilidad <- posibilidades
-        if oraculo(posibilidad) == true
+        if oraculo(posibilidad)
       } yield posibilidad
 
       cadenaEncontrada.mkString
 
     }else{
-      val subCadenasCorrectas1 = reconstruirCadenaTurboAceleradaAux( Seq(), Seq(), Seq(), n/2,2,1)
-      val subCadenasCorrectas2 = reconstruirCadenaTurboAceleradaAux( Seq(), Seq(), Seq(), n-(n/2),2,1)
+      val subCadenasCorrectas1 = reconstruirCadenaTurboAceleradaAux(Seq(), n/2,2,1)
+      val subCadenasCorrectas2 = reconstruirCadenaTurboAceleradaAux(Seq(), n-(n/2),2,1)
       val posiblesCadenas = for {
         subCadena1 <- subCadenasCorrectas1
         subCadena2 <- subCadenasCorrectas2
@@ -209,7 +201,7 @@ object Funciones {
       val posibilidades = vacio.generarPosibilidades(arbolDePosibilidades)
       val cadenaEncontrada = for {
         posibilidad <- posibilidades
-        if oraculo(posibilidad) == true
+        if oraculo(posibilidad)
       } yield posibilidad
 
       cadenaEncontrada.mkString
