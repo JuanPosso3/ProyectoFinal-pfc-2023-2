@@ -136,6 +136,8 @@ object Funciones_Paralelas {
     }
 
   }
+
+  /*
   def reconstruirCadenaTurboAceleradaPar(n : Int , o : Oraculo ) : Seq [Char]= {
     def reconstruirCadenaTurboAceleradaParAux(acu: Seq[String], n:Int,baseInicial:Int,potencia:Int): Seq[String] = {
       if ( baseInicial >= n && acu.nonEmpty) {
@@ -154,49 +156,6 @@ object Funciones_Paralelas {
       }
     }
 
-    if(n%2 == 0){
-      val subCadenasCorrectas = (reconstruirCadenaTurboAceleradaParAux(Seq(), n/2,2,1))
-
-      val posiblesCadenas =  for {
-        subCadena1 <- subCadenasCorrectas
-        subCadena2 <- subCadenasCorrectas
-        if  ((subCadena1 + subCadena2).length == n)
-      } yield subCadena1 + subCadena2
-
-      val vacio = new Nodo(' ', false, Nil)
-      val arbolDePosibilidades = task(vacio.arbolDeSufijos(posiblesCadenas))
-      val posibilidades = vacio.generarPosibilidades(arbolDePosibilidades.join())
-      val cadenaEncontrada = for {
-        posibilidad <- posibilidades
-        if o(posibilidad)
-      } yield posibilidad
-
-      cadenaEncontrada.mkString
-
-
-    }else{
-      val (subCadenasCorrectas1,subCadenasCorrectas2) = parallel(reconstruirCadenaTurboAceleradaParAux(Seq(), n/2,2,1)
-        , reconstruirCadenaTurboAceleradaParAux(Seq(), n-(n/2),2,1))
-      val posiblesCadenas = for {
-        subCadena1 <- subCadenasCorrectas1
-        subCadena2 <- subCadenasCorrectas2
-        if  ((subCadena1 + subCadena2).length == n)
-      } yield subCadena1 + subCadena2
-
-      val vacio = new Nodo(' ', false, Nil)
-      val arbolDePosibilidades = task(vacio.arbolDeSufijos(posiblesCadenas))
-      val posibilidades = vacio.generarPosibilidades(arbolDePosibilidades.join())
-      val cadenaEncontrada = for {
-        posibilidad <- posibilidades
-        if o(posibilidad)
-      } yield posibilidad
-
-      cadenaEncontrada.mkString
-
-
-    }
-
-  }
-
+*/
 
 }

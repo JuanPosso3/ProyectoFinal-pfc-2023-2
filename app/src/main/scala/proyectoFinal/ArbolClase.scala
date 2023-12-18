@@ -1,5 +1,6 @@
 package proyectoFinal
 
+/*
 abstract class ArbolClase {
 
   def raiz(t: ArbolClase): Char = {
@@ -9,12 +10,7 @@ abstract class ArbolClase {
     }
   }
 
-  def cabezas(t: ArbolClase): Seq[Char] = {
-    t match {
-      case Nodo(_, _, lt) => lt.map(t => raiz(t))
-      case Hoja(c, _) => Seq[Char](c)
-    }
-  }
+
 
   def arbolDeSufijos(sufijos: Seq[String]): ArbolClase = {
     sufijos.foldLeft(Nodo(' ', false, List.empty[ArbolClase]): ArbolClase) { (trie, sufijo) =>
@@ -41,20 +37,6 @@ abstract class ArbolClase {
       }
   }
 
-  def generarPosibilidades(t: ArbolClase): Seq[String] = {
-    def reconstruyendoPosibilidades(t: ArbolClase, prefijo: String): Seq[String] = t match {
-      case Hoja(_, _) => Seq(prefijo)
-      case Nodo(_, _, hijos) =>
-        if (hijos.isEmpty) {
-          // Nodo sin hijos, devuelve solo el prefijo actual
-          Seq(prefijo)
-        } else {
-          hijos.flatMap(h => reconstruyendoPosibilidades(h, prefijo + raiz(h)))
-        }
-    }
-
-    reconstruyendoPosibilidades(t, "")
-  }
 
   def pertenece(s: String, t: ArbolClase): Boolean = {
     t match {
@@ -85,3 +67,4 @@ abstract class ArbolClase {
 case class Hoja (car:Char, marcada:Boolean) extends ArbolClase
 case class Nodo (car:Char, marcada:Boolean,hijos :List[ArbolClase]) extends ArbolClase
 
+*/
